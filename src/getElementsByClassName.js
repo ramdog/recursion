@@ -5,5 +5,18 @@
 
 // But in stead we're going to implement it from scratch:
 var getElementsByClassName = function (className) {
-  // your code here
+  var result = []; //Need to revisit this, i think it needs to be an HTMLCollection
+  function findNext(element) {
+  	if (element.classList.contains(className)) {
+  		result.push(element);
+  	} else {
+  		_.each(element.childNodes, function(childNode) {
+  			if (childNode.nodeType == 1) {
+  				findNext(childNode);
+  			}
+  		});
+  	}
+  }
+  findNext(document.body);
+  return result;
 };
