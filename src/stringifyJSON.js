@@ -32,7 +32,11 @@ var stringifyJSON = function (obj) {
 				}
 			}
 		} else if (typeof obj == "object" && obj !== null) {
-			// remember, typeof null == "object" unfortunately
+			// Regarding the parameters, remember that typeof null == "object" unfortunately
+			
+			// I'm pretty sure that it's inefficient to loop over the entire object to start
+			// just to weed out those guys, but it was the easiest way to implement given the
+			// code I'd written below after I had already caught this issue from testing.
 			var tempObj = {};
 			for (var item in obj) {
 				if (typeof obj[item] !== "function" && typeof obj[item] !== "undefined") {
