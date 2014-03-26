@@ -31,11 +31,21 @@ var stringifyJSON = function (obj) {
 					addNext(obj[i]);
 				}
 			}
-		} else if (typeof obj == "object") {
+		} else if (typeof obj == "object" && obj !== null) {
+			// remember, typeof null == "object" unfortunately
+			var tempObj = {};
+			for (var item in obj) {
+				if (typeof obj[item] !== "function" && typeof obj[item] !== "undefined") {
+					tempObj[item] = obj[item];
+				}
+			}
+			obj = tempObj;
+
 			var objLength = Object.keys(obj).length;
 			if (objLength === 0) {
 				resultStr += "{}";
 			}
+
 			var counter = 0;
 			
 			for (var item in obj) {
@@ -60,10 +70,13 @@ var stringifyJSON = function (obj) {
 				resultStr += '"' + obj + '"';
 			} else if (obj === null) {
 				resultStr += "null";
-			} else {
+			} else if (typeof obj == "number" || typeof obj == "boolean") {
 				// number, boolean
 				resultStr += obj;
 			}
+			// no catch-all else provided here so it should 
+			// to weed out functions and undefined and 
+			// hopefully nothing else(?)
 		}
 	}
 	addNext(obj);
