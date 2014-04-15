@@ -8,38 +8,28 @@ var isStringifiable = function (item) {
 }
 
 var stringifyJSON = function (obj) {
-  // Create initial string
-  var result = "";
+  var temp;
 
-  // if its not a function or an undefined value
   if (isStringifiable(obj)) {
-    if (typeof obj === 'number' ) {
-      result += obj;
-    } else if ( typeof obj === 'string' ) {
-      result += "\"" + obj + "\"";
-    } else if ( typeof obj === 'boolean') {
-      result += obj ? "true" : "false";
-    } else if ( obj === null) {
-      result += "null";
+    if ( typeof obj === 'string' ) {
+      return "\"" + obj + "\"";
     } else if ( Array.isArray(obj) ) {
-      var temp = [];
+      temp = [];
       for (var i = 0; i < obj.length; i++) {
-        if ( isStringifiable(obj[i]) ) {
-          temp.push( stringifyJSON(obj[i]) );
-        }
+        temp.push( stringifyJSON(obj[i]) );
       }
-      result += "[" + temp.join(",") + "]";
-    } else if (typeof obj === 'object') {
-      var temp = [];
+      return "[" + temp.join(",") + "]";
+    } else if (obj && typeof obj === 'object') {
+      temp = [];
       for ( var key in obj ) {
         if ( isStringifiable(obj[key]) ) {
           temp.push(stringifyJSON(key) + ":" + stringifyJSON(obj[key]));
         }
       }
-      result += "{" + temp.join(",") + "}";
+      return "{" + temp.join(",") + "}";
+    } else {
+      return "" + obj;
     }
 
   }
-
-  return result;
 };
